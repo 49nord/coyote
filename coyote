@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 log = logging.getLogger('coyote')
 log.setLevel(logging.INFO)
 
-WEBROOT = '/tmp/webroot/.well-known/acme-challenge'
+WEBROOT = '/var/www/html/.well-known/acme-challenge'
 
 for domain in sys.argv[1:]:
     account_key_fn = '/etc/coyote/{}.key'.format(domain)
