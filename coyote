@@ -18,6 +18,9 @@ log.setLevel(logging.INFO)
 
 WEBROOT = '/var/www/html/.well-known/acme-challenge'
 
+# do not renew if valid for at least 30 more days
+TIMEVALID = 60 * 60 * 24 * 30
+
 for domain in sys.argv[1:]:
     account_key_fn = '/etc/coyote/{}.key'.format(domain)
     key_fn = '/etc/ssl/private/{}.pem'.format(domain)
@@ -30,6 +33,19 @@ for domain in sys.argv[1:]:
     log.info('Certificate key: {}'.format(key_fn))
     log.info('Certificate signing request: {}'.format(csr_fn))
     log.info('Certificate file: {}'.format(cert_fn))
+
+    # step 0: check if certificate exists and is valid for another TIMEVALID
+    #         seconds
+    if os.path.exists(cert_fn):
+        rval = subprocess.call([
+            'openssl', 'x509', '-checkend',
+            str(TIMEVALID), '-noout', '-in', cert_fn
+        ])
+
+        if rval == 0:
+            log.info('Certificate file {} is valid for at least another {} '
+                     'seconds, not touching this.'.format(cert_fn, TIMEVALID))
+            continue
 
     # step 1: generate rsa keys
     log.info('Generating account RSA key...')
