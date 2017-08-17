@@ -6,6 +6,7 @@ import subprocess
 import sys
 
 import acme_tiny
+import requests
 
 # all files should only be readable by us by default
 os.umask(0o077)
@@ -22,6 +23,7 @@ for domain in sys.argv[1:]:
     key_fn = '/etc/ssl/private/{}.pem'.format(domain)
     csr_fn = '/etc/coyote/{}.csr'.format(domain)
     cert_fn = '/etc/ssl/{}.crt'.format(domain)
+    chain_fn = '/etc/ssl/{}.chain.crt'.format(domain)
 
     log.info('Renewing {}'.format(domain))
     log.info('Account key: {}'.format(account_key_fn))
@@ -47,16 +49,28 @@ for domain in sys.argv[1:]:
     # step 3: use acme-tiny to create new certificate
     crt = acme_tiny.get_crt(account_key_fn, csr_fn, WEBROOT)
 
+    # step 4: download root certificate
+    resp = requests.get(
+        'https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt')
+    resp.raise_for_status()
+    ca_cert = resp.text()
+
     # step 4: write out cert
-    log.info('Saving certificate')
+    log.info('Saving certificate {}'.format(cert_fn))
     with open(cert_fn, 'w') as out:
         out.write(crt)
+
+    log.info('Saving chain {}'.format(chain_fn))
+    with open(chain_fn, 'w') as out:
+        out.write(crt)
+        out.write(ca_cert)
 
     # step 5: fix permissions for ssl certs
     log.info('Fixing permissions')
     subprocess.check_call(['chown', 'root:ssl-cert', key_fn])
     os.chmod(key_fn, mode=0o640)
     os.chmod(cert_fn, mode=0o644)
+    os.chmod(chain_fn, mode=0o644)
 
     # step 6: reload nginx
     log.info('Reloading/restarting nginx')
