@@ -57,3 +57,7 @@ for domain in sys.argv[1:]:
     subprocess.check_call(['chown', 'root:ssl-cert', key_fn])
     os.chmod(key_fn, mode=0o640)
     os.chmod(cert_fn, mode=0o644)
+
+    # step 6: reload nginx
+    log.info('Reloading/restarting nginx')
+    subprocess.check_call(['systemctl', 'reload-or-try-restart', 'nginx'])
