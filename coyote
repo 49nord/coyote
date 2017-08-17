@@ -55,7 +55,7 @@ for domain in sys.argv[1:]:
     resp = requests.get(
         'https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt')
     resp.raise_for_status()
-    ca_cert = resp.text()
+    ca_cert = resp.text
 
     # step 4: write out cert
     log.info('Saving certificate {}'.format(cert_fn))
