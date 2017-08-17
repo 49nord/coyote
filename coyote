@@ -47,7 +47,9 @@ for domain in sys.argv[1:]:
     ])
 
     # step 3: use acme-tiny to create new certificate
+    os.umask(0o022)
     crt = acme_tiny.get_crt(account_key_fn, csr_fn, WEBROOT)
+    os.umask(0o077)
 
     # step 4: download root certificate
     resp = requests.get(
