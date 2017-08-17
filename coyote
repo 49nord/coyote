@@ -31,22 +31,26 @@ for domain in sys.argv[1:]:
 
     # step 1: generate rsa keys
     log.info('Generating account RSA key...')
-    #subprocess.check_call(['openssl', 'genrsa', '-out', account_key_fn, '4096'])
+    subprocess.check_call(
+        ['openssl', 'genrsa', '-out', account_key_fn, '4096'])
 
     log.info('Generating certificate RSA key')
-    #subprocess.check_call(['openssl', 'genrsa', '-out', key_fn, '4096'])
+    subprocess.check_call(['openssl', 'genrsa', '-out', key_fn, '4096'])
 
     # step 2: generate csr
-    #log.info('Generating CSR')
-    #subprocess.check_call(['openssl', 'req', '-out', csr_fn, '-new', '-sha256', '-key', key_fn, '-subj', '/CN=' + domain])
+    log.info('Generating CSR')
+    subprocess.check_call([
+        'openssl', 'req', '-out', csr_fn, '-new', '-sha256', '-key', key_fn,
+        '-subj', '/CN=' + domain
+    ])
 
     # step 3: use acme-tiny to create new certificate
-    #crt = acme_tiny.get_crt(account_key_fn, csr_fn, WEBROOT)
+    crt = acme_tiny.get_crt(account_key_fn, csr_fn, WEBROOT)
 
     # step 4: write out cert
-    #log.info('Saving certificate')
-    #with open(cert_fn, 'w') as out:
-    #    out.write(crt)
+    log.info('Saving certificate')
+    with open(cert_fn, 'w') as out:
+        out.write(crt)
 
     # step 5: fix permissions for ssl certs
     log.info('Fixing permissions')
