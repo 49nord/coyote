@@ -1,0 +1,55 @@
+#!/usr/bin/python3
+
+import logging
+import os
+import subprocess
+import sys
+
+import acme_tiny
+
+# all files should only be readable by us by default
+os.umask(0o077)
+
+logging.basicConfig(level=logging.INFO)
+
+log = logging.getLogger('coyote')
+log.setLevel(logging.INFO)
+
+WEBROOT = '/tmp/webroot/.well-known/acme-challenge'
+
+for domain in sys.argv[1:]:
+    account_key_fn = '/etc/coyote/{}.key'.format(domain)
+    key_fn = '/etc/ssl/private/{}.pem'.format(domain)
+    csr_fn = '/etc/coyote/{}.csr'.format(domain)
+    cert_fn = '/etc/ssl/{}.crt'.format(domain)
+
+    log.info('Renewing {}'.format(domain))
+    log.info('Account key: {}'.format(account_key_fn))
+    log.info('Certificate key: {}'.format(key_fn))
+    log.info('Certificate signing request: {}'.format(csr_fn))
+    log.info('Certificate file: {}'.format(cert_fn))
+
+    # step 1: generate rsa keys
+    log.info('Generating account RSA key...')
+    #subprocess.check_call(['openssl', 'genrsa', '-out', account_key_fn, '4096'])
+
+    log.info('Generating certificate RSA key')
+    #subprocess.check_call(['openssl', 'genrsa', '-out', key_fn, '4096'])
+
+    # step 2: generate csr
+    #log.info('Generating CSR')
+    #subprocess.check_call(['openssl', 'req', '-out', csr_fn, '-new', '-sha256', '-key', key_fn, '-subj', '/CN=' + domain])
+
+    # step 3: use acme-tiny to create new certificate
+    #crt = acme_tiny.get_crt(account_key_fn, csr_fn, WEBROOT)
+
+    # step 4: write out cert
+    #log.info('Saving certificate')
+    #with open(cert_fn, 'w') as out:
+    #    out.write(crt)
+
+    # step 5: fix permissions for ssl certs
+    log.info('Fixing permissions')
+    subprocess.check_call(['chown', 'root:ssl-cert', key_fn])
+    os.chmod(key_fn, mode=0o640)
+    os.chmod(cert_fn, mode=0o644)
