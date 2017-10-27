@@ -20,6 +20,10 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+# coyote: A command-line tool for automatic let's encrypt / ACME certificate
+#         renewal, usually used with sytemd and nginx. The program is fairly
+#         minimal and requires only `requests` and `acme_tiny`.
+
 import logging
 import os
 import subprocess
