@@ -2,7 +2,7 @@
 Description=Run coyote to update ACME SSL certificate (lets encrypt) every day
 
 [Timer]
-OnCalendar=21:15
+OnCalendar=03:00
 Persistent=true
 
 [Install]
