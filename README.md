@@ -15,10 +15,11 @@ TBW
 Command-line use
 ----------------
 
-`coyote` takes a single command-line argument, the domain to renew:
+`coyote` takes domains to renew as command-line arguments (you can list
+multiple):
 
 ```
-coyote mydomain.example.com
+coyote mydomain.example.com [...]
 ```
 
 Once started, it will first check if a certificate file named
