@@ -1,3 +1,4 @@
 #!/bin/sh
 
+mkdir -p /etc/coyote
 /bin/systemctl daemon-reload
