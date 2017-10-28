@@ -1,0 +1,10 @@
+Package: coyote
+Version: 1.0-1
+Section: base
+Priority: optional
+Architecture: any
+Depends: python3-requests (>= 2.4), acme-tiny (>= 20160801-3~bpo8+1), openssl
+Maintainer: 49nord GmbH <hello@49nord.de>
+Description: A simple ACME certificate refreshing daemon
+ Contains a simple script to requests and update an SSL certificate in tandem
+ with a webserver like nginx.
