@@ -4,5 +4,5 @@ After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/coyote %i
+ExecStart=/usr/bin/coyote %i
 RemainAfterExit=false
