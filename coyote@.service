@@ -1,5 +1,5 @@
 [Unit]
-Description=Coyote ACME certificate update (let's encrypt)
+Description=Coyote ACME certificate update (let's encrypt) for domain %i
 After=network.target
 
 [Service]
