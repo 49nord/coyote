@@ -3,5 +3,9 @@ image: marcbrinkmann.de/rust-stable-1.20
 
 build:
   stage: build
+  artifacts:
+    expire_in: 1 month
+    paths:
+      - coyote_1.0-1.deb
   script:
     - make
