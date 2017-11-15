@@ -1,0 +1,7 @@
+# image doesn't matter, as long as it is debian based
+image: marcbrinkmann.de/rust-1.20
+
+build:
+  stage: build
+  script:
+    - make
