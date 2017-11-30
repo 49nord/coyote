@@ -2,4 +2,5 @@ language: python
 python:
   - "3.5"
 script:
+  - sudo apt-get -y install fakeroot
   - make
