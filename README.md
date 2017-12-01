@@ -3,6 +3,10 @@ coyote: Automatic let's encrypt / ACME certificate renewal
 
 `coyote` renews [let's encrypt](https://letsencrypt.org/) certificates automatically using the ACME protocol. It only performs the necessary steps to renew the certificates, and is usually used in tandem with systemd and nginx.
 
+
+[![Build Status](https://travis-ci.org/49nord/coyote.svg?branch=master)](https://travis-ci.org/49nord/coyote)
+[![Latest Release](https://img.shields.io/github/release/49nord/coyote/all.svg)](https://github.com/49nord/coyote/releases)
+
 Quick start
 -----------
 
@@ -22,7 +26,7 @@ Once the package is installed, nginx (or another webserver) needs to be configur
 # systemctl reload nginx
 ```
 
-See the Webserver configuration section for details.
+See the [Webserver configuration](#webserver-configuration) section for details.
 
 With the nginx in place, `coyote` can be setup. The debian package will install a systemd template unit named `coyote@`, including a timer. The following commands set up automatic certificate generation and renewal via let's encrypt:
 
@@ -38,7 +42,7 @@ Enabling the `.timer` will cause the timer to be started on the next boot, while
 
 The resulting certificates will then be stored as `/etc/ssl/private/mydomain.example.com.pem` (key), `/etc/ssl/mydomain.example.com.crt` (certificate) and `/etc/ssl/mydomain.example.com.chain.crt` (certificate chain with the necessary intermediate certificates).
 
-For multiple domains on the same machine, see the "Scheduling coyote" section below.
+For multiple domains on the same machine, see the [Scheduling coyote](#scheduling-coyote) section below.
 
 ## Manual installation
 
@@ -66,7 +70,7 @@ The resulting certificate will be stored as **`/etc/ssl/mydomain.example.com.crt
 Webserver configuration
 -----------------------
 
-Coyote assumes that the directory `/var/www/html/.well-known/acme-challenge` on the machine it itself is running will be visible via HTTP on the domain name being registered. No assumptions are made beyond. Challanges to prove ownership required by the ACME protocol are put into thus directory.
+Coyote assumes that the directory `/var/www/html/.well-known/acme-challenge` on the machine it itself is running on will be visible via HTTP on the domain name being registered. No further assumptions are made. Challenges to prove ownership required by the ACME protocol are put into this directory.
 
 ### nginx
 
