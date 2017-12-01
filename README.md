@@ -24,7 +24,7 @@ Once the package is installed, nginx (or another webserver) needs to be configur
 
 See the Webserver configuration section for details.
 
-With the nginx in place, `coyote` can be setup. The debian package will install a systemd template unit named `coyote@`, including a timer. The following command sets up automatic certificate generation and renewal via let's encrypt:
+With the nginx in place, `coyote` can be setup. The debian package will install a systemd template unit named `coyote@`, including a timer. The following commands set up automatic certificate generation and renewal via let's encrypt:
 
 ```
 # systemctl enable coyote@mydomain.example.com.timer
