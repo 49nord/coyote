@@ -12,7 +12,19 @@ First, install coyote. The recommended way is to install the tiny debian package
 # dpkg -i coyote_VERSION.deb
 ```
 
-Once coyote is installed, it will setup a systemd template unit named `coyote@`, including a timer. The following command sets up automatic certificate generation and renewal via let's encrypt:
+Note that the package does not perform destructive operations, change configuration or start services by itself.
+
+Once the package is installed, nginx (or another webserver) needs to be configured. The recommended setup is to redirect all HTTP requests to HTTPS requests, except for those required by let's encrypt (`http://mydomain.example.com/.well-known/acme-challenge`). The debian package ships with a configuration that does exactly that, on Debian systems it can be enabled as follows:
+
+```
+# rm /etc/nginx/sites-enabled/default
+# ln -s /etc/nginx/sites-available/00_acme-challenge /etc/nginx/sites-enabled/00_acme-challenge
+# systemctl reload nginx
+```
+
+See the Webserver configuration section for details.
+
+With the nginx in place, `coyote` can be setup. The debian package will install a systemd template unit named `coyote@`, including a timer. The following command sets up automatic certificate generation and renewal via let's encrypt:
 
 ```
 # systemctl enable coyote@mydomain.example.com.timer
@@ -20,7 +32,7 @@ Once coyote is installed, it will setup a systemd template unit named `coyote@`,
 # systemctl start coyote@mydomain.example.com.service
 ```
 
-Enabling the `.timer` will cause the timer to be started on the next boot, while the start command causes it to also be started right now. The start on the service will immediately run coyote once, causing a certificate to be generated.
+Enabling the `.timer` will cause the timer to be started on the next boot, while the start command causes it to also be started right now. The `start` command targeting the `.service` will immediately run coyote once, resulting in a certificate to be generated.
 
 `coyote` will be run once per day at 3 am and check if the certificate has less than 30 days to live. If that is the case, it will attempt to generate a new one.
 
