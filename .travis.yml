@@ -2,12 +2,13 @@ language: python
 python:
   - "3.5"
 script:
+  - if [ -z ${TRAVIS_TAG+x} ]; then echo "building without a release version"; else echo "Building version ${TRAVIS_TAG}"; fi
   - sudo apt-get -y install fakeroot
   - make VERSION=$TRAVIS_TAG
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
-  file: coyote_${TRAVIS_TAG}-1
+  file: coyote_${TRAVIS_TAG}-1.deb
   skip_cleanup: true
   on:
     tags: true
