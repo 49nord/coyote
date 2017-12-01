@@ -6,6 +6,26 @@ coyote: Automatic let's encrypt / ACME certificate renewal
 Quick start
 -----------
 
+First, install coyote. The recommended way is to install the tiny debian package included in this repository; see [releases](https://github.com/49nord/coyote/releases) for the latest version:
+
+```
+# dpkg -i coyote_VERSION.deb
+```
+
+Once coyote is installed, it will setup a systemd template unit named `coyote@`, including a timer. The following command sets up automatic certificate generation and renewal via let's encrypt:
+
+```
+# systemctl enable coyote@mydomain.example.com.timer
+# systemctl start coyote@mydomain.example.com.timer
+# systemctl start coyote@mydomain.example.com.service
+```
+
+Enabling the `.timer` will cause the timer to be started on the next boot, while the start command causes it to also be started right now. The start on the service will immediately run coyote once, causing a certificate to be generated.
+
+`coyote` will be run once per day at 3 am and check if the certificate has less than 30 days to live. If that is the case, it will attempt to generate a new one.
+
+## Manual installation
+
 TBW
 
 
@@ -15,7 +35,7 @@ Command-line use
 `coyote` takes domains to renew as command-line arguments (you can list multiple):
 
 ```
-coyote mydomain.example.com [...]
+# coyote mydomain.example.com [...]
 ```
 
 Once started, it will first check if a certificate file named `/etc/ssl/mydomain.example.com.crt` exists. If it does and its expiration date is at least 30 days in the future, no action will be taken.
