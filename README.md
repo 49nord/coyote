@@ -64,10 +64,15 @@ The resulting certificate will be stored as **`/etc/ssl/mydomain.example.com.crt
 Webserver configuration
 -----------------------
 
+Coyote assumes that the directory `/var/www/html/.well-known/acme-challenge` on the machine it itself is running will be visible via HTTP on the domain name being registered. No assumptions are made beyond. Challanges to prove ownership required by the ACME protocol are put into thus directory.
 
 ### nginx
 
-TBW
+On debian systems, nginx and other webservers can be configured using the `sites-available` and `sites-enabled` directory model, with configuration file fragments put into `sites-available` and then enabled by symlinking the fragment into `sites-enabled`.
+
+The default `00_acme-challenge` fragment registers a default HTTP server with nginx that only allows HTTP requests to the `.well-know/acme-challenge` path to go through, while all others are redirected with a HTTP 301 status code to the equivalent `https://` URL.
+
+It can be enabled by removing the `default` fragment in `/etc/nginx/sites-enabled` (which would otherwise conflict due to its `default_server` directive) and symlinking the `/etc/nginx/sites-available/00_acme-challenge` file into `/etc/nginx/sites-enabled`.
 
 
 Enabling using systemd
