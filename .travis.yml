@@ -3,4 +3,12 @@ python:
   - "3.5"
 script:
   - sudo apt-get -y install fakeroot
-  - make
+  - make VERSION=$TRAVIS_TAG
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file: coyote_${TRAVIS_TAG}-1
+  skip_cleanup: true
+  on:
+    tags: true
+    branch: master
