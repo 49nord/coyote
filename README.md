@@ -38,6 +38,8 @@ Enabling the `.timer` will cause the timer to be started on the next boot, while
 
 The resulting certificates will then be stored as `/etc/ssl/private/mydomain.example.com.pem` (key), `/etc/ssl/mydomain.example.com.crt` (certificate) and `/etc/ssl/mydomain.example.com.chain.crt` (certificate chain with the necessary intermediate certificates).
 
+For multiple domains on the same machine, see the "Scheduling coyote" section below.
+
 ## Manual installation
 
 The `.deb` is fairly simple but on different distros coyote can be used standalone. The `coyote` python script assumes that `acme-tiny` and `requests` are installed.
@@ -75,10 +77,39 @@ The default `00_acme-challenge` fragment registers a default HTTP server with ng
 It can be enabled by removing the `default` fragment in `/etc/nginx/sites-enabled` (which would otherwise conflict due to its `default_server` directive) and symlinking the `/etc/nginx/sites-available/00_acme-challenge` file into `/etc/nginx/sites-enabled`.
 
 
-Enabling using systemd
-----------------------
+Scheduling coyote
+-----------------
 
-TBW
+`coyote` is not a daemon, but a script that checks if work is to be done and exits otherwise. For this reason it relies on an external scheduling mechanism like cron, systemd or an admin that runs it manually.
+
+### Using systemd
+
+The debian package ships with systemd unit- and timer files. The unit file itself can be used to run the script once. Note that these files are template files; simply substituting a domain will run coyote correctly, although only once:
+
+```
+# systemctl start coyote@mydomain.example.com.service
+```
+
+Coyote does not require any configuration files.
+
+While starting the the service will result in a single run, the timer can be used to automatically run coyote every day at 3 am:
+
+```
+# systemctl start coyote@mydomain.example.com.timer
+```
+
+To make the timer persist after rebooting, it should also be enabled, causing it to be started on bootup:
+
+```
+# systemctl enable coyote@mydomain.example.com.timer
+```
+
+Coyote is safe to start multiple times per day; it will only request a new certificate if the old one is about to expire.
+
+
+### Multiple domains
+
+All files touched by coyote contain the domain name to be renewed. Any number of coyote instances can be run in parallel. If a server requires three domains, simply enabling/starting the respective systemd services, each with a different domain name, is enough to obtain certificates for all three.
 
 
 Security
