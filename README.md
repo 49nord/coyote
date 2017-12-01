@@ -36,9 +36,13 @@ Enabling the `.timer` will cause the timer to be started on the next boot, while
 
 `coyote` will be run once per day at 3 am and check if the certificate has less than 30 days to live. If that is the case, it will attempt to generate a new one.
 
+The resulting certificates will then be stored as `/etc/ssl/private/mydomain.example.com.pem` (key), `/etc/ssl/mydomain.example.com.crt` (certificate) and `/etc/ssl/mydomain.example.com.chain.crt` (certificate chain with the necessary intermediate certificates).
+
 ## Manual installation
 
-TBW
+The `.deb` is fairly simple but on different distros coyote can be used standalone. The `coyote` python script assumes that `acme-tiny` and `requests` are installed.
+
+The systemd units are straightforward and can manually be installed as well. The `00_acme-challenge` is a suggestion for an nginx configuration.
 
 
 Command-line use
