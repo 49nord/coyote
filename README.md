@@ -122,3 +122,11 @@ Security
 `coyote` has three dependencies: [acme-tiny](https://github.com/diafygi/acme-tiny), [requests](docs.python-requests.org/) and OpenSSL. `acme-tiny` is meant to be reviewed personally, though it is also installable as a Debian packages called [acme-tiny](https://packages.debian.org/search?keywords=acme-tiny). `requests` can be installed on Debian in the form of [python3-requests](https://packages.debian.org/search?suite=default&section=all&arch=any&searchon=names&keywords=python3-requests). Alternatively it can also be installed "manually"using virtualenv.
 
 Since `coyote` is a single file executable, it can and should also be reviewed manually, similar to `acme-tiny`.
+
+
+Debian Jessie
+-------------
+
+`coyote` was written for debian Jessie systems when [certbot](https://certbot.eff.org/all-instructions/#debian-8-jessie-none-of-the-above) was not available. However, the `acme-tiny` dependency is broken, as it contains an upstream bug that has only been fixed in Debian testing, although installing the debian Buster version on debian Jessie is usually not an issue.
+
+At this point we recommend [certbot](https://certbot.eff.org/all-instructions/#debian-8-jessie-none-of-the-above) for any new systems, which has since then arrived in `jessie-backports`.
