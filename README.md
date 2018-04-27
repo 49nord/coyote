@@ -1,7 +1,7 @@
 coyote: Automatic let's encrypt / ACME certificate renewal
 ==========================================================
 
-**DEPRECATION WARNING**: `coyote` is under active maintenance, but will not be developed further. Use [certbtot](https://certbot.eff.org) instead.
+**DEPRECATION WARNING**: `coyote` is under active maintenance, but will not be developed further. Use [certbot](https://certbot.eff.org) instead.
 
 `coyote` renews [let's encrypt](https://letsencrypt.org/) certificates automatically using the ACME protocol. It only performs the necessary steps to renew the certificates, and is usually used in tandem with systemd and nginx.
 
